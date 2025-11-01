@@ -1,0 +1,327 @@
+{% extends "base.html" %}
+
+{% block title %}حسابي - متجر العبايات{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-12">
+            <h2 class="mb-4">حسابي</h2>
+        </div>
+    </div>
+    
+    <div class="row">
+        <!-- القائمة الجانبية -->
+        <div class="col-md-3 mb-4">
+            <div class="list-group">
+                <a href="#profile" class="list-group-item list-group-item-action active" data-bs-toggle="tab">المعلومات الشخصية</a>
+                <a href="#orders" class="list-group-item list-group-item-action" data-bs-toggle="tab">طلباتي</a>
+                <a href="#addresses" class="list-group-item list-group-item-action" data-bs-toggle="tab">العناوين</a>
+                <a href="#wishlist" class="list-group-item list-group-item-action" data-bs-toggle="tab">المفضلة</a>
+                <a href="{{ url_for('logout') }}" class="list-group-item list-group-item-action text-danger">تسجيل الخروج</a>
+            </div>
+        </div>
+        
+        <!-- المحتوى -->
+        <div class="col-md-9">
+            <div class="tab-content">
+                <!-- المعلومات الشخصية -->
+                <div class="tab-pane fade show active" id="profile">
+                    <div class="card">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0">المعلومات الشخصية</h5>
+                        </div>
+                        <div class="card-body">
+                            <form method="POST" action="{{ url_for('update_account') }}">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="first_name" class="form-label">الاسم الأول</label>
+                                        <input type="text" class="form-control" id="first_name" name="first_name" value="{{ current_user.first_name }}" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="last_name" class="form-label">الاسم الأخير</label>
+                                        <input type="text" class="form-control" id="last_name" name="last_name" value="{{ current_user.last_name }}" required>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="username" class="form-label">اسم المستخدم</label>
+                                    <input type="text" class="form-control" id="username" name="username" value="{{ current_user.username }}" required>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">البريد الإلكتروني</label>
+                                    <input type="email" class="form-control" id="email" name="email" value="{{ current_user.email }}" required>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="phone" class="form-label">رقم الهاتف</label>
+                                    <input type="tel" class="form-control" id="phone" name="phone" value="{{ current_user.phone }}">
+                                </div>
+                                
+                                <button type="submit" class="btn btn-primary">حفظ التغييرات</button>
+                            </form>
+                            
+                            <hr class="my-4">
+                            
+                            <h6 class="mb-3">تغيير كلمة المرور</h6>
+                            <form method="POST" action="{{ url_for('update_account') }}">
+                                <div class="mb-3">
+                                    <label for="current_password" class="form-label">كلمة المرور الحالية</label>
+                                    <input type="password" class="form-control" id="current_password" name="current_password">
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="new_password" class="form-label">كلمة المرور الجديدة</label>
+                                    <input type="password" class="form-control" id="new_password" name="new_password">
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="confirm_password" class="form-label">تأكيد كلمة المرور</label>
+                                    <input type="password" class="form-control" id="confirm_password" name="confirm_password">
+                                </div>
+                                
+                                <button type="submit" class="btn btn-primary">تغيير كلمة المرور</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- الطلبات -->
+                <div class="tab-pane fade" id="orders">
+                    <div class="card">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0">طلباتي</h5>
+                        </div>
+                        <div class="card-body">
+                            {% if orders %}
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>رقم الطلب</th>
+                                            <th>التاريخ</th>
+                                            <th>الحالة</th>
+                                            <th>المجموع</th>
+                                            <th>الإجراءات</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for order in orders %}
+                                        <tr>
+                                            <td>#{{ order.id }}</td>
+                                            <td>{{ order.order_date.strftime('%Y-%m-%d') }}</td>
+                                            <td>
+                                                <span class="badge 
+                                                    {% if order.status == 'delivered' %}bg-success
+                                                    {% elif order.status == 'processing' %}bg-primary
+                                                    {% elif order.status == 'shipped' %}bg-info
+                                                    {% elif order.status == 'cancelled' %}bg-danger
+                                                    {% else %}bg-warning{% endif %}">
+                                                    {{ order.status }}
+                                                </span>
+                                            </td>
+                                            <td>{{ order.total_amount }} ر.س</td>
+                                            <td>
+                                                <a href="{{ url_for('order_detail', order_id=order.id) }}" class="btn btn-sm btn-outline-primary">عرض التفاصيل</a>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            {% else %}
+                            <div class="text-center py-4">
+                                <i class="bi bi-cart-x display-4 text-muted"></i>
+                                <p class="mt-3">لا توجد طلبات بعد</p>
+                                <a href="{{ url_for('products') }}" class="btn btn-primary">تسوق الآن</a>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- العناوين -->
+                <div class="tab-pane fade" id="addresses">
+                    <div class="card">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0">عناويني</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6 mb-4">
+                                    <div class="card h-100">
+                                        <div class="card-header">
+                                            <h6 class="mb-0">عنوان المنزل</h6>
+                                        </div>
+                                        <div class="card-body">
+                                            {% if current_user.address %}
+                                            <p>{{ current_user.address }}</p>
+                                            <p>{{ current_user.city }}, {{ current_user.country }}</p>
+                                            <p>هاتف: {{ current_user.phone }}</p>
+                                            {% else %}
+                                            <p class="text-muted">لم تقم بإضافة عنوان منزل بعد</p>
+                                            {% endif %}
+                                        </div>
+                                        <div class="card-footer">
+                                            <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#addressModal">تعديل العنوان</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6 mb-4">
+                                    <div class="card h-100">
+                                        <div class="card-header">
+                                            <h6 class="mb-0">عنوان العمل</h6>
+                                        </div>
+                                        <div class="card-body">
+                                            {% if current_user.work_address %}
+                                            <p>{{ current_user.work_address }}</p>
+                                            <p>{{ current_user.work_city }}, {{ current_user.work_country }}</p>
+                                            <p>هاتف: {{ current_user.work_phone }}</p>
+                                            {% else %}
+                                            <p class="text-muted">لم تقم بإضافة عنوان عمل بعد</p>
+                                            {% endif %}
+                                        </div>
+                                        <div class="card-footer">
+                                            <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#workAddressModal">تعديل العنوان</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- المفضلة -->
+                <div class="tab-pane fade" id="wishlist">
+                    <div class="card">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0">قائمة المفضلة</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="text-center py-4">
+                                <i class="bi bi-heart display-4 text-muted"></i>
+                                <p class="mt-3">قائمة المفضلة فارغة</p>
+                                <a href="{{ url_for('products') }}" class="btn btn-primary">استكشف المنتجات</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal لعنوان المنزل -->
+<div class="modal fade" id="addressModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">تعديل عنوان المنزل</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="POST" action="{{ url_for('update_address') }}">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="address" class="form-label">العنوان</label>
+                        <textarea class="form-control" id="address" name="address" rows="3">{{ current_user.address }}</textarea>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="city" class="form-label">المدينة</label>
+                            <input type="text" class="form-control" id="city" name="city" value="{{ current_user.city }}">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="country" class="form-label">البلد</label>
+                            <select class="form-select" id="country" name="country">
+                                <option value="SA" {% if current_user.country == 'SA' %}selected{% endif %}>المملكة العربية السعودية</option>
+                                <option value="AE" {% if current_user.country == 'AE' %}selected{% endif %}>الإمارات العربية المتحدة</option>
+                                <option value="KW" {% if current_user.country == 'KW' %}selected{% endif %}>الكويت</option>
+                                <option value="QA" {% if current_user.country == 'QA' %}selected{% endif %}>قطر</option>
+                                <option value="BH" {% if current_user.country == 'BH' %}selected{% endif %}>البحرين</option>
+                                <option value="OM" {% if current_user.country == 'OM' %}selected{% endif %}>عمان</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="phone" class="form-label">رقم الهاتف</label>
+                        <input type="tel" class="form-control" id="phone" name="phone" value="{{ current_user.phone }}">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                    <button type="submit" class="btn btn-primary">حفظ التغييرات</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal لعنوان العمل -->
+<div class="modal fade" id="workAddressModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">تعديل عنوان العمل</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="POST" action="{{ url_for('update_work_address') }}">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="work_address" class="form-label">عنوان العمل</label>
+                        <textarea class="form-control" id="work_address" name="work_address" rows="3">{{ current_user.work_address }}</textarea>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="work_city" class="form-label">المدينة</label>
+                            <input type="text" class="form-control" id="work_city" name="work_city" value="{{ current_user.work_city }}">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="work_country" class="form-label">البلد</label>
+                            <select class="form-select" id="work_country" name="work_country">
+                                <option value="SA" {% if current_user.work_country == 'SA' %}selected{% endif %}>المملكة العربية السعودية</option>
+                                <option value="AE" {% if current_user.work_country == 'AE' %}selected{% endif %}>الإمارات العربية المتحدة</option>
+                                <option value="KW" {% if current_user.work_country == 'KW' %}selected{% endif %}>الكويت</option>
+                                <option value="QA" {% if current_user.work_country == 'QA' %}selected{% endif %}>قطر</option>
+                                <option value="BH" {% if current_user.work_country == 'BH' %}selected{% endif %}>البحرين</option>
+                                <option value="OM" {% if current_user.work_country == 'OM' %}selected{% endif %}>عمان</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="work_phone" class="form-label">رقم الهاتف</label>
+                        <input type="tel" class="form-control" id="work_phone" name="work_phone" value="{{ current_user.work_phone }}">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                    <button type="submit" class="btn btn-primary">حفظ التغييرات</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// تفعيل تبويبات القائمة الجانبية
+const triggerTabList = document.querySelectorAll('.list-group-item');
+triggerTabList.forEach(triggerEl => {
+    new bootstrap.Tab(triggerEl);
+});
+
+// حفظ التبويب النشط في localStorage
+$('a[data-bs-toggle="tab"]').on('shown.bs.tab', function(e) {
+    localStorage.setItem('activeTab', $(e.target).attr('href'));
+});
+
+// استعادة التبويب النشط من localStorage
+const activeTab = localStorage.getItem('activeTab');
+if (activeTab) {
+    const tab = new bootstrap.Tab(document.querySelector(`a[href="${activeTab}"]`));
+    tab.show();
+}
+</script>
+{% endblock %}

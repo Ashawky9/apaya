@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block title %}إنشاء حساب - متجر العبايات{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white text-center py-3">
+                    <h4 class="mb-0">إنشاء حساب جديد</h4>
+                </div>
+                <div class="card-body p-4">
+                    <form method="POST" action="{{ url_for('register') }}">
+                        {{ form.hidden_tag() }}
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="first_name" class="form-label">الاسم الأول</label>
+                                {{ form.first_name(class="form-control", id="first_name", placeholder="أدخل الاسم الأول") }}
+                                {% for error in form.first_name.errors %}
+                                <div class="text-danger">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="last_name" class="form-label">الاسم الأخير</label>
+                                {{ form.last_name(class="form-control", id="last_name", placeholder="أدخل الاسم الأخير") }}
+                                {% for error in form.last_name.errors %}
+                                <div class="text-danger">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="username" class="form-label">اسم المستخدم</label>
+                            {{ form.username(class="form-control", id="username", placeholder="أدخل اسم المستخدم") }}
+                            {% for error in form.username.errors %}
+                            <div class="text-danger">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="email" class="form-label">البريد الإلكتروني</label>
+                            {{ form.email(class="form-control", id="email", placeholder="أدخل البريد الإلكتروني") }}
+                            {% for error in form.email.errors %}
+                            <div class="text-danger">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="password" class="form-label">كلمة المرور</label>
+                                {{ form.password(class="form-control", id="password", placeholder="أدخل كلمة المرور") }}
+                                {% for error in form.password.errors %}
+                                <div class="text-danger">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="confirm_password" class="form-label">تأكيد كلمة المرور</label>
+                                {{ form.confirm_password(class="form-control", id="confirm_password", placeholder="أعد إدخال كلمة المرور") }}
+                                {% for error in form.confirm_password.errors %}
+                                <div class="text-danger">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="agree_terms" required>
+                            <label class="form-check-label" for="agree_terms">
+                                أوافق على <a href="{{ url_for('terms') }}">الشروط والأحكام</a> و <a href="{{ url_for('privacy') }}">سياسة الخصوصية</a>
+                            </label>
+                        </div>
+                        
+                        <div class="d-grid">
+                            {{ form.submit(class="btn btn-primary") }}
+                        </div>
+                    </form>
+                    
+                    <hr class="my-4">
+                    
+                    <div class="text-center">
+                        <p>لديك حساب بالفعل؟ <a href="{{ url_for('login') }}">سجل الدخول هنا</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

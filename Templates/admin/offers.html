@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block title %}إدارة العروض - متجر العبايات{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h2 class="mb-0">إدارة العروض</h2>
+        <a href="{{ url_for('add_offer') }}" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> إضافة عرض جديد
+        </a>
+    </div>
+    
+    <!-- جدول العروض -->
+    <div class="card shadow">
+        <div class="card-header py-3 d-flex justify-content-between align-items-center">
+            <h6 class="m-0 font-weight-bold text-primary">قائمة العروض</h6>
+            <span>إجمالي العروض: {{ offers|length }}</span>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>الصورة</th>
+                            <th>العنوان</th>
+                            <th>السعر الأصلي</th>
+                            <th>سعر العرض</th>
+                            <th>نسبة الخصم</th>
+                            <th>تاريخ البداية</th>
+                            <th>تاريخ النهاية</th>
+                            <th>الحالة</th>
+                            <th>الإجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for offer in offers %}
+                        <tr>
+                            <td>
+                                {% if offer.image and offer.image != 'default_offer.jpg' %}
+                                <img src="{{ url_for('static', filename='uploads/offers/' + offer.image) }}" 
+                                     alt="{{ offer.title }}" 
+                                     width="50" 
+                                     height="50" 
+                                     style="object-fit: cover;"
+                                     class="rounded">
+                                {% else %}
+                                <div class="bg-light rounded d-flex align-items-center justify-content-center" 
+                                     style="width: 50px; height: 50px;">
+                                    <i class="bi bi-tag text-muted"></i>
+                                </div>
+                                {% endif %}
+                            </td>
+                            <td>{{ offer.title }}</td>
+                            <td>{{ offer.original_price }} ر.س</td>
+                            <td>{{ offer.offer_price }} ر.س</td>
+                            <td>{{ offer.discount_percentage }}%</td>
+                            <td>{{ offer.start_date.strftime('%Y-%m-%d') }}</td>
+                            <td>{{ offer.end_date.strftime('%Y-%m-%d') }}</td>
+                            <td>
+                                {% if offer.is_active and offer.end_date >= now %}
+                                <span class="badge bg-success">نشط</span>
+                                {% else %}
+                                <span class="badge bg-secondary">منتهي</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <a href="{{ url_for('edit_offer', id=offer.id) }}" class="btn btn-sm btn-primary">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    
+                                    <form action="{{ url_for('toggle_offer', id=offer.id) }}" method="POST" class="d-inline">
+                                        <button type="submit" class="btn btn-sm {% if offer.is_active %}btn-warning{% else %}btn-success{% endif %}">
+                                            <i class="bi bi-{% if offer.is_active %}toggle-off{% else %}toggle-on{% endif %}"></i>
+                                        </button>
+                                    </form>
+                                    
+                                    <form action="{{ url_for('delete_offer', id=offer.id) }}" method="POST" class="d-inline">
+                                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('هل أنت متأكد من حذف هذا العرض؟')">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

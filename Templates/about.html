@@ -1,0 +1,170 @@
+{% extends "base.html" %}
+
+{% block title %}من نحن - متجر العبايات{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ url_for('index') }}">الرئيسية</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">من نحن</li>
+                </ol>
+            </nav>
+            
+            <h2 class="mb-4">من نحن</h2>
+        </div>
+    </div>
+    
+    <div class="row mb-5">
+        <div class="col-lg-6">
+            <img src="{{ url_for('static', filename='images/about.jpg') }}" alt="من نحن" class="img-fluid rounded shadow">
+        </div>
+        <div class="col-lg-6">
+            <h3 class="mb-3">مرحباً بكم في متجر العبايات</h3>
+            <p>نحن متجر متخصص في بيع أجود أنواع العبايات والمنتجات النسائية ذات الجودة العالية والتصميمات العصرية. منذ تأسيسنا في عام 2010، ونحن نعمل على تقديم أفضل المنتجات التي تناسب المرأة العربية العصرية.</p>
+            <p>نفخر بتقديم تشكيلة واسعة من العبايات التي تجمع بين الأصالة والحداثة، مصممة خصيصاً لتلبي احتياجات وأذواق مختلف العملاء.</p>
+            
+            <div class="row mt-4">
+                <div class="col-md-6 mb-3">
+                    <div class="d-flex align-items-center">
+                        <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+                            <i class="bi bi-award text-white fs-4"></i>
+                        </div>
+                        <div>
+                            <h5 class="mb-0">جودة عالية</h5>
+                            <small>منتجاتنا مصنوعة من أجود المواد</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <div class="d-flex align-items-center">
+                        <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+                            <i class="bi bi-truck text-white fs-4"></i>
+                        </div>
+                        <div>
+                            <h5 class="mb-0">شحن سريع</h5>
+                            <small>توصيل لجميع أنحاء المملكة</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <div class="d-flex align-items-center">
+                        <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+                            <i class="bi bi-arrow-left-right text-white fs-4"></i>
+                        </div>
+                        <div>
+                            <h5 class="mb-0">إرجاع سهل</h5>
+                            <small>إمكانية الإرجاع خلال 14 يوم</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <div class="d-flex align-items-center">
+                        <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+                            <i class="bi bi-headset text-white fs-4"></i>
+                        </div>
+                        <div>
+                            <h5 class="mb-0">دعم فني</h5>
+                            <small>خدمة عملاء على مدار الساعة</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mb-5">
+        <div class="col-12">
+            <h3 class="text-center mb-4">رؤيتنا ورسالتنا</h3>
+            
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center p-4">
+                            <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 70px; height: 70px;">
+                                <i class="bi bi-eye text-white fs-2"></i>
+                            </div>
+                            <h4 class="card-title">رؤيتنا</h4>
+                            <p class="card-text">أن نكون الوجهة الأولى للمرأة العربية التي تبحث عن الأناقة والجودة في منتجات العبايات والملابس النسائية.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center p-4">
+                            <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 70px; height: 70px;">
+                                <i class="bi bi-send text-white fs-2"></i>
+                            </div>
+                            <h4 class="card-title">رسالتنا</h4>
+                            <p class="card-text">تقديم منتجات عالية الجودة بأسعار مناسبة، مع توفير تجربة تسوق متميزة وخدمة عملاء استثنائية.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mb-5">
+        <div class="col-12">
+            <h3 class="text-center mb-4">قيمنا</h3>
+            
+            <div class="row">
+                <div class="col-md-3 col-sm-6 text-center mb-4">
+                    <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                        <i class="bi bi-heart fs-2 text-primary"></i>
+                    </div>
+                    <h5>الجودة</h5>
+                    <p class="text-muted">نحرص على تقديم منتجات عالية الجودة تلبي توقعات عملائنا</p>
+                </div>
+                <div class="col-md-3 col-sm-6 text-center mb-4">
+                    <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                        <i class="bi bi-shield-check fs-2 text-primary"></i>
+                    </div>
+                    <h5>الثقة</h5>
+                    <p class="text-muted">ثقة عملائنا هي أغلى ما نملك ونعمل على تعزيزها يومياً</p>
+                </div>
+                <div class="col-md-3 col-sm-6 text-center mb-4">
+                    <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                        <i class="bi bi-lightbulb fs-2 text-primary"></i>
+                    </div>
+                    <h5>الإبداع</h5>
+                    <p class="text-muted">نبتكر تصميمات عصرية تجمع بين الأصالة والموضة</p>
+                </div>
+                <div class="col-md-3 col-sm-6 text-center mb-4">
+                    <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                        <i class="bi bi-people fs-2 text-primary"></i>
+                    </div>
+                    <h5>العمل الجماعي</h5>
+                    <p class="text-muted">نعمل كفريق واحد لتحقيق رضا عملائنا وتطوير منتجاتنا</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-12">
+            <h3 class="text-center mb-4">فريق العمل</h3>
+            
+            <div class="row justify-content-center">
+                <div class="col-md-3 col-sm-6 text-center mb-4">
+                    <img src="{{ url_for('static', filename='images/team/team1.jpg') }}" alt="فريق العمل" class="img-fluid rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;">
+                    <h5>سارة أحمد</h5>
+                    <p class="text-muted">مصممة أزياء</p>
+                </div>
+                <div class="col-md-3 col-sm-6 text-center mb-4">
+                    <img src="{{ url_for('static', filename='images/team/team2.jpg') }}" alt="فريق العمل" class="img-fluid rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;">
+                    <h5>فاطمة محمد</h5>
+                    <p class="text-muted">مديرة التسويق</p>
+                </div>
+                <div class="col-md-3 col-sm-6 text-center mb-4">
+                    <img src="{{ url_for('static', filename='images/team/team3.jpg') }}" alt="فريق العمل" class="img-fluid rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;">
+                    <h5>لمى عبدالله</h5>
+                    <p class="text-muted">مديرة خدمة العملاء</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

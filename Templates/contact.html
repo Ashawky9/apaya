@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+
+{% block title %}اتصل بنا - متجر العبايات{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ url_for('index') }}">الرئيسية</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">اتصل بنا</li>
+                </ol>
+            </nav>
+            
+            <h2 class="mb-4">اتصل بنا</h2>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-lg-8 mb-5">
+            <div class="card">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">أرسل رسالة</h5>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="{{ url_for('contact') }}">
+                        {{ form.hidden_tag() }}
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="name" class="form-label">الاسم الكامل</label>
+                                {{ form.name(class="form-control", id="name", placeholder="أدخل اسمك الكامل") }}
+                                {% for error in form.name.errors %}
+                                <div class="text-danger">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="email" class="form-label">البريد الإلكتروني</label>
+                                {{ form.email(class="form-control", id="email", placeholder="أدخل بريدك الإلكتروني") }}
+                                {% for error in form.email.errors %}
+                                <div class="text-danger">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="subject" class="form-label">الموضوع</label>
+                            {{ form.subject(class="form-control", id="subject", placeholder="موضوع الرسالة") }}
+                            {% for error in form.subject.errors %}
+                            <div class="text-danger">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="message" class="form-label">الرسالة</label>
+                            {{ form.message(class="form-control", id="message", rows="5", placeholder="اكتب رسالتك هنا...") }}
+                            {% for error in form.message.errors %}
+                            <div class="text-danger">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                        
+                        <div class="d-grid">
+                            {{ form.submit(class="btn btn-primary") }}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="card mb-4">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">معلومات التواصل</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex align-items-start mb-3">
+                        <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                            <i class="bi bi-geo-alt text-white"></i>
+                        </div>
+                        <div>
+                            <h6 class="mb-0">العنوان</h6>
+                            <p class="text-muted mb-0">الرياض، المملكة العربية السعودية</p>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex align-items-start mb-3">
+                        <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                            <i class="bi bi-telephone text-white"></i>
+                        </div>
+                        <div>
+                            <h6 class="mb-0">الهاتف</h6>
+                            <p class="text-muted mb-0">+966 12 345 6789</p>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex align-items-start mb-3">
+                        <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                            <i class="bi bi-envelope text-white"></i>
+                        </div>
+                        <div>
+                            <h6 class="mb-0">البريد الإلكتروني</h6>
+                            <p class="text-muted mb-0">info@abaya-store.com</p>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex align-items-start">
+                        <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                            <i class="bi bi-clock text-white"></i>
+                        </div>
+                        <div>
+                            <h6 class="mb-0">ساعات العمل</h6>
+                            <p class="text-muted mb-0">الأحد - الخميس: 8 ص - 10 م</p>
+                            <p class="text-muted mb-0">الجمعة - السبت: 4 م - 10 م</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">تابعنا</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-center">
+                        <a href="#" class="text-dark mx-2 fs-4"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="text-dark mx-2 fs-4"><i class="bi bi-twitter"></i></a>
+                        <a href="#" class="text-dark mx-2 fs-4"><i class="bi bi-instagram"></i></a>
+                        <a href="#" class="text-dark mx-2 fs-4"><i class="bi bi-snapchat"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">الموقع على الخريطة</h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="ratio ratio-16x9">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d36204.10081085196!2d46.67233736994105!3d24.713729037367467!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e2f03890d489399%3A0xba974d1c98e79fd5!2sRiyadh%20Saudi%20Arabia!5e0!3m2!1sen!2sus!4v1665582343551!5m2!1sen!2sus" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}تفاصيل الرسالة - متجر العبايات{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h2 class="mb-0">تفاصيل الرسالة</h2>
+        <a href="{{ url_for('admin_messages') }}" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> رجوع إلى الرسائل
+        </a>
+    </div>
+    
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card shadow">
+                <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                    <h6 class="m-0 font-weight-bold text-primary">معلومات الرسالة</h6>
+                    <span class="badge {% if message.is_read %}bg-success{% else %}bg-warning{% endif %}">
+                        {{ 'تم القراءة' if message.is_read else 'جديد' }}
+                    </span>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <p><strong>المرسل:</strong> {{ message.name }}</p>
+                            <p><strong>البريد الإلكتروني:</strong> {{ message.email }}</p>
+                            <p><strong>الهاتف:</strong> {{ message.phone or 'غير متوفر' }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>التاريخ:</strong> {{ message.created_at.strftime('%Y-%m-%d %H:%M') }}</p>
+                            <p><strong>الموضوع:</strong> {{ message.subject }}</p>
+                            <p><strong>IP Address:</strong> {{ message.ip_address }}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <h6 class="font-weight-bold">نص الرسالة:</h6>
+                        <div class="card">
+                            <div class="card-body">
+                                <p class="card-text">{{ message.message }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between">
+                        <form action="{{ url_for('delete_message', id=message.id) }}" method="POST" class="d-inline">
+                            <button type="submit" class="btn btn-danger" onclick="return confirm('هل أنت متأكد من حذف هذه الرسالة؟')">
+                                <i class="bi bi-trash"></i> حذف الرسالة
+                            </button>
+                        </form>
+                        
+                        <a href="mailto:{{ message.email }}?subject=رد على: {{ message.subject }}" class="btn btn-primary">
+                            <i class="bi bi-reply"></i> الرد على الرسالة
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

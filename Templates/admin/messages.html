@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}رسائل التواصل - متجر العبايات{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h2 class="mb-0">إدارة رسائل التواصل</h2>
+    </div>
+    
+    <!-- جدول الرسائل -->
+    <div class="card shadow">
+        <div class="card-header py-3 d-flex justify-content-between align-items-center">
+            <h6 class="m-0 font-weight-bold text-primary">قائمة الرسائل</h6>
+            <span>إجمالي الرسائل: {{ messages|length }}</span>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>المرسل</th>
+                            <th>البريد الإلكتروني</th>
+                            <th>الموضوع</th>
+                            <th>التاريخ</th>
+                            <th>الحالة</th>
+                            <th>الإجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for message in messages %}
+                        <tr class="{% if not message.is_read %}table-info{% endif %}">
+                            <td>{{ message.name }}</td>
+                            <td>{{ message.email }}</td>
+                            <td>{{ message.subject }}</td>
+                            <td>{{ message.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                            <td>
+                                {% if message.is_read %}
+                                <span class="badge bg-success">تم القراءة</span>
+                                {% else %}
+                                <span class="badge bg-warning">جديد</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{{ url_for('admin_message_detail', id=message.id) }}" class="btn btn-sm btn-primary">
+                                    <i class="bi bi-eye"></i> عرض
+                                </a>
+                                <form action="{{ url_for('delete_message', id=message.id) }}" method="POST" class="d-inline">
+                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('هل أنت متأكد من حذف هذه الرسالة؟')">
+                                        <i class="bi bi-trash"></i> حذف
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="6" class="text-center">لا توجد رسائل</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+
+{% block title %}تأكيد الطلب - متجر العبايات{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card text-center">
+                <div class="card-body py-5">
+                    <div class="confirmation-icon text-success mb-4">
+                        <i class="bi bi-check-circle-fill display-1"></i>
+                    </div>
+                    
+                    <h2 class="card-title mb-3">شكراً لطلبك!</h2>
+                    <p class="card-text mb-4">تم استلام طلبك بنجاح وسيتم تجهيزه للشحن في أقرب وقت ممكن.</p>
+                    
+                    <div class="order-details bg-light p-4 rounded mb-4">
+                        <h5 class="mb-3">تفاصيل الطلب</h5>
+                        <div class="row text-start">
+                            <div class="col-md-6 mb-2">
+                                <strong>رقم الطلب:</strong> #{{ order.id }}
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <strong>تاريخ الطلب:</strong> {{ order.order_date.strftime('%Y-%m-%d %H:%M') }}
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <strong>طريقة الدفع:</strong> 
+                                {% if order.payment_method == 'credit_card' %}
+                                بطاقة ائتمان
+                                {% elif order.payment_method == 'cash_on_delivery' %}
+                                الدفع عند الاستلام
+                                {% elif order.payment_method == 'mada' %}
+                                مدى
+                                {% else %}
+                                {{ order.payment_method }}
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <strong>الحالة:</strong> 
+                                <span class="badge bg-warning">{{ order.status }}</span>
+                            </div>
+                            <div class="col-12 mb-2">
+                                <strong>عنوان الشحن:</strong> {{ order.shipping_address }}
+                            </div>
+                            <div class="col-12">
+                                <strong>المجموع:</strong> {{ order.total_amount }} ر.س
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex justify-content-center gap-3">
+                        <a href="{{ url_for('index') }}" class="btn btn-outline-primary">العودة إلى الرئيسية</a>
+                        <a href="{{ url_for('account') }}" class="btn btn-primary">عرض طلباتي</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card mt-4">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">المنتجات المطلوبة</h5>
+                </div>
+                <div class="card-body">
+                    {% for item in order.items %}
+                    <div class="row align-items-center mb-3">
+                        <div class="col-md-2">
+                            <img 
+                                src="{{ url_for('static', filename='uploads/products/' + item.product.primary_image) }}" 
+                                alt="{{ item.product.name }}" 
+                                class="img-fluid rounded"
+                                style="height: 80px; object-fit: cover;"
+                            >
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="mb-1">{{ item.product.name }}</h6>
+                            <p class="text-muted mb-0">الكمية: {{ item.quantity }}</p>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <span class="h6">{{ item.price * item.quantity }} ر.س</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h5 class="mb-3">ماذا بعد؟</h5>
+                    <div class="row">
+                        <div class="col-md-4 text-center mb-3">
+                            <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-2" style="width: 60px; height: 60px;">
+                                <i class="bi bi-envelope-check text-primary fs-4"></i>
+                            </div>
+                            <h6>تأكيد البريد</h6>
+                            <p class="small text-muted">سيتم إرسال تأكيد الطلب إلى بريدك الإلكتروني</p>
+                        </div>
+                        <div class="col-md-4 text-center mb-3">
+                            <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-2" style="width: 60px; height: 60px;">
+                                <i class="bi bi-truck text-primary fs-4"></i>
+                            </div>
+                            <h6>تجهيز الطلب</h6>
+                            <p class="small text-muted">سيتم تجهيز طلبك للشحن خلال 24-48 ساعة</p>
+                        </div>
+                        <div class="col-md-4 text-center mb-3">
+                            <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-2" style="width: 60px; height: 60px;">
+                                <i class="bi bi-house-door text-primary fs-4"></i>
+                            </div>
+                            <h6>التسليم</h6>
+                            <p class="small text-muted">سيصل طلبك خلال 2-5 أيام عمل</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block title %}إدارة المستخدمين - متجر العبايات{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h2 class="mb-0">إدارة المستخدمين</h2>
+    </div>
+    
+    <!-- فلترة البحث -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">بحث عن المستخدمين</h6>
+        </div>
+        <div class="card-body">
+            <form method="GET" class="row g-3">
+                <div class="col-md-6">
+                    <input type="text" class="form-control" name="q" placeholder="بحث بالاسم أو البريد الإلكتروني" value="{{ request.args.get('q', '') }}">
+                </div>
+                <div class="col-md-4">
+                    <select class="form-select" name="role">
+                        <option value="">جميع الصلاحيات</option>
+                        <option value="admin" {% if request.args.get('role') == 'admin' %}selected{% endif %}>مديرون</option>
+                        <option value="user" {% if request.args.get('role') == 'user' %}selected{% endif %}>مستخدمون عاديون</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">بحث</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- جدول المستخدمين -->
+    <div class="card shadow">
+        <div class="card-header py-3 d-flex justify-content-between align-items-center">
+            <h6 class="m-0 font-weight-bold text-primary">قائمة المستخدمين</h6>
+            <span>إجمالي المستخدمين: {{ users|length }}</span>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>الاسم</th>
+                            <th>البريد الإلكتروني</th>
+                            <th>الهاتف</th>
+                            <th>تاريخ التسجيل</th>
+                            <th>الصلاحية</th>
+                            <th>الحالة</th>
+                            <th>الإجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                        <tr>
+                            <td>{{ user.first_name }} {{ user.last_name }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>{{ user.phone or 'غير متوفر' }}</td>
+                            <td>{{ user.created_at.strftime('%Y-%m-%d') }}</td>
+                            <td>
+                                {% if user.is_admin %}
+                                <span class="badge bg-danger">مدير</span>
+                                {% else %}
+                                <span class="badge bg-secondary">مستخدم</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if user.is_active %}
+                                <span class="badge bg-success">نشط</span>
+                                {% else %}
+                                <span class="badge bg-secondary">غير نشط</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    {% if not user.is_admin or user.id == current_user.id %}
+                                    <form action="{{ url_for('toggle_admin', id=user.id) }}" method="POST" class="d-inline">
+                                        <button type="submit" class="btn btn-sm {% if user.is_admin %}btn-warning{% else %}btn-info{% endif %}" 
+                                                onclick="return confirm('هل أنت متأكد من تغيير صلاحية هذا المستخدم؟')">
+                                            <i class="bi bi-{% if user.is_admin %}person-x{% else %}person-check{% endif %}"></i>
+                                            {{ 'إزالة الصلاحية' if user.is_admin else 'جعل مدير' }}
+                                        </button>
+                                    </form>
+                                    {% endif %}
+                                    
+                                    {% if user.id != current_user.id %}
+                                    <form action="{{ url_for('delete_user', id=user.id) }}" method="POST" class="d-inline">
+                                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('هل أنت متأكد من حذف هذا المستخدم؟')">
+                                            <i class="bi bi-trash"></i> حذف
+                                        </button>
+                                    </form>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

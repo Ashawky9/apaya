@@ -1,0 +1,256 @@
+{% extends "base.html" %} {% block title %}متجر العبايات - الرئيسية{% endblock
+%} {% block content %}
+<!-- البنر الرئيسي -->
+<section class="hero-section">
+  <div class="container">
+    <div class="royal-banner-modern">
+      <div class="row align-items-center">
+        <div class="col-lg-6">
+          <div class="banner-content">
+            <div class="banner-badge">تشكيلة جديدة 2025</div>
+            <h1 class="royal-title">
+              <span class="title-line">عبايات</span>
+              <span class="royal-accent">بلمسة ملكية</span>
+            </h1>
+            <p class="royal-description">
+              جودة استثنائية وتصميم فاخر يجمع بين الأصالة والحداثة في كل قطعة.
+            </p>
+            <div class="royal-offer">
+              <span class="offer-text">خصم يصل إلى ٣٠٪ على أول طلب</span>
+            </div>
+            <div class="banner-actions">
+              <a href="{{ url_for('products') }}" class="royal-button">
+                <span>اكتشف المجموعة</span>
+                <i class="bi bi-arrow-left"></i>
+              </a>
+              <a href="{{ url_for('offers') }}" class="royal-button-outline">
+                <span>العروض الحالية</span>
+                <i class="bi bi-percent"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="image-container">
+            <div class="royal-image-wrapper">
+              <img
+                src="{{ url_for('static', filename='images/uploads/6hnklTjtwYSq1hhm9dKcvjqn7WHRBw1LsnnBeypp.webp') }}"
+                alt="عبايات أنيقة"
+                class="royal-image animated-image"
+              />
+            </div>
+            <div class="floating-elements">
+              <div class="floating-element element-1">
+                <i class="bi bi-star-fill"></i>
+                <span>جودة عالية</span>
+              </div>
+              <div class="floating-element element-2">
+                <i class="bi bi-truck"></i>
+                <span>توصيل سريع</span>
+              </div>
+              <div class="floating-element element-3">
+                <i class="bi bi-arrow-repeat"></i>
+                <span>إرجاع مجاني</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- أحدث المنتجات -->
+<section class="products-section py-5">
+  <div class="container">
+    <div class="row mb-4">
+      <div class="col-12">
+        <h2 class="text-center mb-3">أحدث المنتجات</h2>
+        <p class="text-center text-muted">
+          اكتشفي أحدث تشكيلاتنا من العبايات والمنتجات المميزة
+        </p>
+      </div>
+    </div>
+
+    <div class="row">
+      {% for product in products %}
+      <div class="col-md-3 col-sm-6 mb-4">
+        <div class="card h-100 product-card">
+          <div class="badge bg-danger position-absolute m-2">جديد</div>
+          <img src="{{ url_for('static', filename='uploads/products/' + product.primary_image) }}">
+
+          <div class="card-body">
+            <h5 class="card-title">{{ product.name }}</h5>
+            <p class="card-text text-muted">
+              {{ product.description[:50] }}...
+            </p>
+            <div class="d-flex justify-content-between align-items-center">
+              <span class="h5 text-primary">{{ product.price }} ر.س</span>
+              {% if product.stock > 0 %}
+              <span class="badge bg-success">متوفر</span>
+              {% else %}
+              <span class="badge bg-danger">غير متوفر</span>
+              {% endif %}
+            </div>
+          </div>
+          <div class="card-footer bg-white">
+            <div class="d-grid gap-2">
+              <a
+                href="{{ url_for('product_detail', id=product.id) }}"
+                class="btn btn-outline-primary"
+                >عرض التفاصيل</a
+              >
+              {% if product.stock > 0 %}
+              <form
+                action="{{ url_for('add_to_cart', product_id=product.id) }}"
+                method="POST"
+              >
+                <button type="submit" class="btn btn-primary w-100">
+                  أضف إلى السلة
+                </button>
+              </form>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <div class="text-center mt-4">
+      <a href="{{ url_for('products') }}" class="btn btn-outline-primary"
+        >عرض جميع المنتجات</a
+      >
+    </div>
+  </div>
+</section>
+
+<!-- الأقسام -->
+<section class="categories-section bg-light py-5">
+  <div class="container">
+    <div class="row mb-4">
+      <div class="col-12">
+        <h2 class="text-center mb-3">أقسام المتجر</h2>
+        <p class="text-center text-muted">تصفحي حسب التصنيف الذي تفضلين</p>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-4 mb-4">
+        <div class="card category-card">
+          <img
+            src="{{ url_for('static', filename='images/uploads/Qi07evwKciQEbAfQ1Z7fJKKVwSioaGKFr1Ss0oKo.webp') }}"
+            class="card-img"
+            alt="عبايات كلاسيكية"
+          />
+          <div
+            class="card-img-overlay d-flex align-items-center justify-content-center"
+          >
+            <div class="text-center">
+              <h3 class="text-white">عبايات كلاسيكية</h3>
+              <a
+                href="{{ url_for('products') }}?category=classic"
+                class="btn btn-light"
+                >استكشف</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4 mb-4">
+        <div class="card category-card">
+          <img
+            src="{{ url_for('static', filename='images/uploads/dual-color-modern-abaya-hanayen-abaya-luxury-abaya-online-39219960938750.webp') }}"
+            class="card-img"
+            alt="عبايات عصرية"
+          />
+          <div
+            class="card-img-overlay d-flex align-items-center justify-content-center"
+          >
+            <div class="text-center">
+              <h3 class="text-white">عبايات عصرية</h3>
+              <a
+                href="{{ url_for('products') }}?category=modern"
+                class="btn btn-light"
+                >استكشف</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4 mb-4">
+        <div class="card category-card">
+          <img
+            src="{{ url_for('static', filename='images/uploads/132934.jpeg') }}"
+            class="card-img"
+            alt="إكسسوارات"
+          />
+          <div
+            class="card-img-overlay d-flex align-items-center justify-content-center"
+          >
+            <div class="text-center">
+              <h3 class="text-white">إكسسوارات</h3>
+              <a
+                href="{{ url_for('products') }}?category=accessories"
+                class="btn btn-light"
+                >استكشف</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- لماذا تختارونا -->
+<section class="features-section py-5">
+  <div class="container">
+    <div class="row mb-4">
+      <div class="col-12">
+        <h2 class="text-center mb-3">لماذا تختار متجرنا؟</h2>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-3 col-sm-6 text-center mb-4">
+        <div class="feature-icon mb-3">
+          <i class="bi bi-truck display-4 text-primary"></i>
+        </div>
+        <h5>شحن سريع</h5>
+        <p class="text-muted">
+          توصيل سريع لجميع أنحاء المملكة خلال 2-5 أيام عمل
+        </p>
+      </div>
+
+      <div class="col-md-3 col-sm-6 text-center mb-4">
+        <div class="feature-icon mb-3">
+          <i class="bi bi-arrow-left-right display-4 text-primary"></i>
+        </div>
+        <h5>إرجاع سهل</h5>
+        <p class="text-muted">إمكانية إرجاع المنتج خلال 14 يوم من الاستلام</p>
+      </div>
+
+      <div class="col-md-3 col-sm-6 text-center mb-4">
+        <div class="feature-icon mb-3">
+          <i class="bi bi-shield-check display-4 text-primary"></i>
+        </div>
+        <h5>دفع آمن</h5>
+        <p class="text-muted">أنظمة دفع آمنة ومشفرة لحماية معلوماتك</p>
+      </div>
+
+      <div class="col-md-3 col-sm-6 text-center mb-4">
+        <div class="feature-icon mb-3">
+          <i class="bi bi-headset display-4 text-primary"></i>
+        </div>
+        <h5>دعم فني</h5>
+        <p class="text-muted">
+          خدمة عملاء متاحة على مدار الساعة طوال أيام الأسبوع
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

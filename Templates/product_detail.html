@@ -1,0 +1,390 @@
+{% extends "base.html" %} 
+{% block title %}{{ product.name }} - متجر العبايات{% endblock %} 
+
+{% block content %}
+<div class="container py-5">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="{{ url_for('index') }}">الرئيسية</a>
+      </li>
+      <li class="breadcrumb-item">
+        <a href="{{ url_for('products') }}">المنتجات</a>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">
+        {{ product.name }}
+      </li>
+    </ol>
+  </nav>
+
+  <div class="row">
+    <!-- معرض الصور -->
+    <div class="col-md-6">
+      {% if product.images %}
+      <div id="product-carousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+          {% for image in product.images %}
+          <div class="carousel-item {% if loop.first %}active{% endif %}">
+            <img
+              src="{{ url_for('static', filename='uploads/products/' + image.image_url) }}"
+              class="d-block w-100"
+              alt="{{ product.name }}"
+              style="height: 500px; object-fit: cover;"
+            />
+          </div>
+          {% endfor %}
+        </div>
+        {% if product.images|length > 1 %}
+        <button
+          class="carousel-control-prev"
+          type="button"
+          data-bs-target="#product-carousel"
+          data-bs-slide="prev"
+        >
+          <span class="carousel-control-prev-icon"></span>
+        </button>
+        <button
+          class="carousel-control-next"
+          type="button"
+          data-bs-target="#product-carousel"
+          data-bs-slide="next"
+        >
+          <span class="carousel-control-next-icon"></span>
+        </button>
+        {% endif %}
+      </div>
+
+      <!-- الصور المصغرة -->
+      {% if product.images|length > 1 %}
+      <div class="row mt-2">
+        {% for image in product.images %}
+        <div class="col-3">
+          <img
+            src="{{ url_for('static', filename='uploads/products/' + image.image_url) }}"
+            class="img-thumbnail"
+            style="cursor: pointer; height: 80px; object-fit: cover;"
+            onclick="$('#product-carousel').carousel({{ loop.index0 }})"
+          />
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+      {% else %}
+      <div class="text-center bg-light rounded" style="height: 500px; display: flex; align-items: center; justify-content: center;">
+        <div>
+          <i class="bi bi-image display-1 text-muted"></i>
+          <p class="text-muted mt-2">لا توجد صور للمنتج</p>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- معلومات المنتج -->
+    <div class="col-md-6">
+      <h1 class="product-title">{{ product.name }}</h1>
+
+      <div class="product-meta mb-3">
+        <div class="rating mb-2">
+          <i class="bi bi-star-fill text-warning"></i>
+          <i class="bi bi-star-fill text-warning"></i>
+          <i class="bi bi-star-fill text-warning"></i>
+          <i class="bi bi-star-fill text-warning"></i>
+          <i class="bi bi-star-half text-warning"></i>
+          <span class="ms-2">(12 تقييم)</span>
+        </div>
+
+        <div class="sku text-muted">
+          <span>رقم المنتج: {{ product.id }}</span>
+        </div>
+      </div>
+
+      <div class="product-price mb-4">
+        {% if product.discount %}
+        <div class="d-flex align-items-center">
+          <span class="h3 text-primary me-3"
+            >{{ product.price - (product.price * product.discount / 100) }} ر.س</span>
+          <span class="h5 text-muted text-decoration-line-through"
+            >{{ product.price }} ر.س</span>
+          <span class="badge bg-danger ms-2">وفر {{ product.discount }}%</span>
+        </div>
+        {% else %}
+        <span class="h3 text-primary">{{ product.price }} ر.س</span>
+        {% endif %}
+      </div>
+
+      <div class="product-details mb-4">
+        <p>{{ product.description }}</p>
+
+        <div class="details-list">
+          <div class="detail-item mb-2">
+            <strong>الفئة:</strong>
+            <span class="badge bg-secondary">{{ product.category }}</span>
+          </div>
+
+          <div class="detail-item mb-2">
+            <strong>الحالة:</strong>
+            {% if product.stock > 0 %}
+            <span class="badge bg-success">متوفر</span>
+            {% else %}
+            <span class="badge bg-danger">غير متوفر</span>
+            {% endif %}
+          </div>
+
+          <div class="detail-item mb-2">
+            <strong>الكمية المتاحة:</strong> {{ product.stock }}
+          </div>
+        </div>
+      </div>
+
+      {% if product.stock > 0 %}
+      <div class="product-actions">
+        <form
+          action="{{ url_for('add_to_cart', product_id=product.id) }}"
+          method="POST"
+          class="row g-3 align-items-center"
+        >
+          <div class="col-auto">
+            <label for="quantity" class="col-form-label">الكمية:</label>
+          </div>
+          <div class="col-auto">
+            <input
+              type="number"
+              class="form-control"
+              id="quantity"
+              name="quantity"
+              value="1"
+              min="1"
+              max="{{ product.stock }}"
+              style="width: 80px"
+            />
+          </div>
+          <div class="col-auto">
+            <button type="submit" class="btn btn-primary btn-lg">
+              <i class="bi bi-cart-plus"></i> أضف إلى السلة
+            </button>
+          </div>
+        </form>
+      </div>
+      {% else %}
+      <div class="alert alert-warning">
+        <i class="bi bi-exclamation-triangle"></i> هذا المنتج غير متوفر حالياً
+      </div>
+      {% endif %}
+
+      <div class="product-share mt-4">
+        <span class="me-2">شارك المنتج:</span>
+        <a href="#" class="text-dark me-2"><i class="bi bi-facebook"></i></a>
+        <a href="#" class="text-dark me-2"><i class="bi bi-twitter"></i></a>
+        <a href="#" class="text-dark me-2"><i class="bi bi-whatsapp"></i></a>
+        <a href="#" class="text-dark"><i class="bi bi-link-45deg"></i></a>
+      </div>
+    </div>
+  </div>
+
+  <!-- التبويبات -->
+  <div class="row mt-5">
+    <div class="col-12">
+      <ul class="nav nav-tabs" id="productTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link active"
+            id="description-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#description"
+            type="button"
+            role="tab"
+          >
+            الوصف
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link"
+            id="details-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#details"
+            type="button"
+            role="tab"
+          >
+            تفاصيل إضافية
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link"
+            id="reviews-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#reviews"
+            type="button"
+            role="tab"
+          >
+            التقييمات (12)
+          </button>
+        </li>
+      </ul>
+
+      <div
+        class="tab-content p-3 border border-top-0 rounded-bottom"
+        id="productTabsContent"
+      >
+        <div class="tab-pane fade show active" id="description" role="tabpanel">
+          <p>{{ product.description }}</p>
+          <p>
+            عباية مصممة بدقة عالية وتناسب جميع المناسبات. مصنوعة من أجود أنواع
+            الأقمشة التي تضمن الراحة والأناقة في نفس الوقت.
+          </p>
+          <ul>
+            <li>قماش عالي الجودة</li>
+            <li>تصميم عصري وأنيق</li>
+            <li>متاحة بألوان متعددة</li>
+            <li>مناسبة للمناسبات المختلفة</li>
+          </ul>
+        </div>
+
+        <div class="tab-pane fade" id="details" role="tabpanel">
+          <table class="table">
+            <tbody>
+              <tr>
+                <th>المادة</th>
+                <td>قمة شيفون عالي الجودة</td>
+              </tr>
+              <tr>
+                <th>اللون</th>
+                <td>أسود، بيج، رمادي، أزرق داكن</td>
+              </tr>
+              <tr>
+                <th>المقاسات المتاحة</th>
+                <td>صغير، متوسط، كبير، كبير جداً</td>
+              </tr>
+              <tr>
+                <th>العناية</th>
+                <td>غسيل يدوي أو غسيل آلي على درجة حرارة منخفضة</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="tab-pane fade" id="reviews" role="tabpanel">
+          <div class="row">
+            <div class="col-md-4">
+              <div class="card">
+                <div class="card-body text-center">
+                  <h2 class="display-4">4.5</h2>
+                  <div class="rating mb-2">
+                    <i class="bi bi-star-fill text-warning"></i>
+                    <i class="bi bi-star-fill text-warning"></i>
+                    <i class="bi bi-star-fill text-warning"></i>
+                    <i class="bi bi-star-fill text-warning"></i>
+                    <i class="bi bi-star-half text-warning"></i>
+                  </div>
+                  <p>بناءً على 12 تقييم</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-8">
+              <div class="review-list">
+                <div class="review-item border-bottom pb-3 mb-3">
+                  <div class="d-flex justify-content-between">
+                    <h5>سارة محمد</h5>
+                    <div class="rating">
+                      <i class="bi bi-star-fill text-warning"></i>
+                      <i class="bi bi-star-fill text-warning"></i>
+                      <i class="bi bi-star-fill text-warning"></i>
+                      <i class="bi bi-star-fill text-warning"></i>
+                      <i class="bi bi-star-fill text-warning"></i>
+                    </div>
+                  </div>
+                  <p class="text-muted">منذ أسبوع</p>
+                  <p>
+                    منتج رائع وجميل، الجودة ممتازة والتنفيذ أنيق. أنصح الجميع
+                    به.
+                  </p>
+                </div>
+
+                <div class="review-item border-bottom pb-3 mb-3">
+                  <div class="d-flex justify-content-between">
+                    <h5>فاطمة أحمد</h5>
+                    <div class="rating">
+                      <i class="bi bi-star-fill text-warning"></i>
+                      <i class="bi bi-star-fill text-warning"></i>
+                      <i class="bi bi-star-fill text-warning"></i>
+                      <i class="bi bi-star-fill text-warning"></i>
+                      <i class="bi bi-star text-warning"></i>
+                    </div>
+                  </div>
+                  <p class="text-muted">منذ 3 أسابيع</p>
+                  <p>
+                    جيدة ولكن المقاس كان أكبر قليلاً من المتوقع. الجودة جيدة
+                    بشكل عام.
+                  </p>
+                </div>
+              </div>
+
+              <button class="btn btn-outline-primary">
+                عرض جميع التقييمات
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- منتجات ذات صلة -->
+  <div class="row mt-5">
+    <div class="col-12">
+      <h3 class="mb-4">منتجات ذات صلة</h3>
+
+      <div class="row">
+        {% for related_product in related_products %}
+        <div class="col-md-3 col-sm-6 mb-4">
+          <div class="card h-100 product-card">
+            <img
+              src="{{ url_for('static', filename='uploads/products/' + related_product.primary_image) }}"
+              class="card-img-top"
+              alt="{{ related_product.name }}"
+              style="height: 250px; object-fit: cover;"
+            />
+            <div class="card-body">
+              <h5 class="card-title">{{ related_product.name }}</h5>
+              <div class="d-flex justify-content-between align-items-center">
+                <span class="h5 text-primary">{{ related_product.price }} ر.س</span>
+                {% if related_product.stock > 0 %}
+                <span class="badge bg-success">متوفر</span>
+                {% else %}
+                <span class="badge bg-danger">غير متوفر</span>
+                {% endif %}
+              </div>
+            </div>
+            <div class="card-footer bg-white">
+              <div class="d-grid gap-2">
+                <a
+                  href="{{ url_for('product_detail', id=related_product.id) }}"
+                  class="btn btn-outline-primary btn-sm"
+                  >عرض التفاصيل</a
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  function changeImage(element) {
+      document.getElementById('main-product-image').src = element.src;
+  }
+
+  // زيادة/تقليل الكمية
+  document.getElementById('quantity').addEventListener('change', function() {
+      if (this.value < 1) this.value = 1;
+      if (this.value > {{ product.stock }}) this.value = {{ product.stock }};
+  });
+</script>
+{% endblock %}

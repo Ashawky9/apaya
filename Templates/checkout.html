@@ -1,0 +1,203 @@
+{% extends "base.html" %}
+
+{% block title %}إتمام الشراء - متجر العبايات{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-12">
+            <h2 class="mb-4">إتمام الشراء</h2>
+        </div>
+    </div>
+    
+    <form method="POST" action="{{ url_for('process_order') }}">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="card mb-4">
+                    <div class="card-header bg-light">
+                        <h5 class="mb-0">معلومات الشحن</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="firstName" class="form-label">الاسم الأول</label>
+                                <input type="text" class="form-control" id="firstName" value="{{ current_user.first_name }}" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="lastName" class="form-label">الاسم الأخير</label>
+                                <input type="text" class="form-control" id="lastName" value="{{ current_user.last_name }}" required>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="email" class="form-label">البريد الإلكتروني</label>
+                            <input type="email" class="form-control" id="email" value="{{ current_user.email }}" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="phone" class="form-label">رقم الهاتف</label>
+                            <input type="tel" class="form-control" id="phone" value="{{ current_user.phone }}" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="address" class="form-label">عنوان الشحن</label>
+                            <textarea class="form-control" id="address" name="shipping_address" rows="3" required>{{ current_user.address }}</textarea>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="city" class="form-label">المدينة</label>
+                                <input type="text" class="form-control" id="city" value="{{ current_user.city }}" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="country" class="form-label">البلد</label>
+                                <select class="form-select" id="country" required>
+                                    <option value="">اختر البلد</option>
+                                    <option value="SA" {% if current_user.country == 'SA' %}selected{% endif %}>المملكة العربية السعودية</option>
+                                    <option value="AE" {% if current_user.country == 'AE' %}selected{% endif %}>الإمارات العربية المتحدة</option>
+                                    <option value="KW" {% if current_user.country == 'KW' %}selected{% endif %}>الكويت</option>
+                                    <option value="QA" {% if current_user.country == 'QA' %}selected{% endif %}>قطر</option>
+                                    <option value="BH" {% if current_user.country == 'BH' %}selected{% endif %}>البحرين</option>
+                                    <option value="OM" {% if current_user.country == 'OM' %}selected{% endif %}>عمان</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" id="saveAddress">
+                            <label class="form-check-label" for="saveAddress">
+                                حفظ معلومات الشحن لاستخدامها في المستقبل
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card mb-4">
+                    <div class="card-header bg-light">
+                        <h5 class="mb-0">طريقة الدفع</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="radio" name="payment_method" id="creditCard" value="credit_card" checked>
+                            <label class="form-check-label" for="creditCard">
+                                بطاقة ائتمان / مدى
+                            </label>
+                        </div>
+                        
+                        <div class="row mb-3" id="creditCardForm">
+                            <div class="col-12 mb-3">
+                                <label for="cardNumber" class="form-label">رقم البطاقة</label>
+                                <input type="text" class="form-control" id="cardNumber" placeholder="1234 5678 9012 3456">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="expiryDate" class="form-label">تاريخ الانتهاء</label>
+                                <input type="text" class="form-control" id="expiryDate" placeholder="MM/YY">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="cvv" class="form-label">CVV</label>
+                                <input type="text" class="form-control" id="cvv" placeholder="123">
+                            </div>
+                            <div class="col-12 mb-3">
+                                <label for="cardName" class="form-label">اسم صاحب البطاقة</label>
+                                <input type="text" class="form-control" id="cardName" placeholder="كما هو مدون على البطاقة">
+                            </div>
+                        </div>
+                        
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="radio" name="payment_method" id="applePay" value="apple_pay">
+                            <label class="form-check-label" for="applePay">
+                                Apple Pay
+                            </label>
+                        </div>
+                        
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="radio" name="payment_method" id="mada" value="mada">
+                            <label class="form-check-label" for="mada">
+                                مدى
+                            </label>
+                        </div>
+                        
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="payment_method" id="cashOnDelivery" value="cash_on_delivery">
+                            <label class="form-check-label" for="cashOnDelivery">
+                                الدفع عند الاستلام
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4">
+                <div class="card">
+                    <div class="card-header bg-light">
+                        <h5 class="mb-0">ملخص الطلب</h5>
+                    </div>
+                    <div class="card-body">
+                        <h6 class="mb-3">المنتجات</h6>
+                        
+                        {% for item in cart_items %}
+                        <div class="d-flex justify-content-between mb-2">
+                            <div>
+                                <span>{{ item.product.name }}</span>
+                                <small class="text-muted d-block">الكمية: {{ item.quantity }}</small>
+                            </div>
+                            <span>{{ item.product.price * item.quantity }} ر.س</span>
+                        </div>
+                        {% endfor %}
+                        
+                        <hr>
+                        
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>الإجمالي:</span>
+                            <span>{{ total }} ر.س</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>تكلفة الشحن:</span>
+                            <span>25 ر.س</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>الضريبة:</span>
+                            <span>{{ (total * 0.15)|round }} ر.س</span>
+                        </div>
+                        
+                        <hr>
+                        
+                        <div class="d-flex justify-content-between mb-3">
+                            <strong>المجموع النهائي:</strong>
+                            <strong>{{ total + 25 + (total * 0.15)|round }} ر.س</strong>
+                        </div>
+                        
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" id="agreeTerms" required>
+                            <label class="form-check-label" for="agreeTerms">
+                                أوافق على <a href="{{ url_for('terms') }}">الشروط والأحكام</a>
+                            </label>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary w-100">تأكيد الطلب</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const paymentMethods = document.querySelectorAll('input[name="payment_method"]');
+    const creditCardForm = document.getElementById('creditCardForm');
+    
+    paymentMethods.forEach(method => {
+        method.addEventListener('change', function() {
+            if (this.value === 'credit_card') {
+                creditCardForm.style.display = 'block';
+            } else {
+                creditCardForm.style.display = 'none';
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

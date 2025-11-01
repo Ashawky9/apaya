@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}تسجيل الدخول - متجر العبايات{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white text-center py-3">
+                    <h4 class="mb-0">تسجيل الدخول</h4>
+                </div>
+                <div class="card-body p-4">
+                    <form method="POST" action="{{ url_for('login') }}">
+                        {{ form.hidden_tag() }}
+                        
+                        <div class="mb-3">
+                            <label for="username" class="form-label">اسم المستخدم</label>
+                            {{ form.username(class="form-control", id="username", placeholder="أدخل اسم المستخدم") }}
+                            {% for error in form.username.errors %}
+                            <div class="text-danger">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="password" class="form-label">كلمة المرور</label>
+                            {{ form.password(class="form-control", id="password", placeholder="أدخل كلمة المرور") }}
+                            {% for error in form.password.errors %}
+                            <div class="text-danger">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                        
+                        <div class="mb-3 form-check">
+                            {{ form.remember(class="form-check-input", id="remember") }}
+                            <label class="form-check-label" for="remember">تذكرني</label>
+                        </div>
+                        
+                        <div class="d-grid">
+                            {{ form.submit(class="btn btn-primary") }}
+                        </div>
+                    </form>
+                    
+                    <div class="text-center mt-3">
+                        <a href="#">نسيت كلمة المرور؟</a>
+                    </div>
+                    
+                    <hr class="my-4">
+                    
+                    <div class="text-center">
+                        <p>ليس لديك حساب؟ <a href="{{ url_for('register') }}">أنشئ حساب جديد</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

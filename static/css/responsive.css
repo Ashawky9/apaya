@@ -1,0 +1,98 @@
+/* هواتف صغيرة (أقل من 576px) */
+@media (max-width: 575.98px) {
+    .navbar-brand img {
+        max-height: 30px;
+    }
+    
+    .hero-section {
+        padding: 2rem 0;
+    }
+    
+    .hero-section .display-4 {
+        font-size: 1.75rem;
+    }
+    
+    .hero-section .lead {
+        font-size: 1rem;
+    }
+    
+    .card {
+        margin-bottom: 1rem;
+    }
+    
+    .product-card .card-img-top {
+        height: 180px;
+    }
+    
+    footer .col-md-4,
+    footer .col-md-3,
+    footer .col-md-2 {
+        margin-bottom: 2rem;
+    }
+    
+    .product-images .main-image img {
+        width: 100%;
+    }
+    
+    .thumbnail-images {
+        overflow-x: auto;
+        padding-bottom: 1rem;
+    }
+}
+
+/* هواتف متوسطة (من 576px إلى 767.98px) */
+@media (min-width: 576px) and (max-width: 767.98px) {
+    .hero-section .display-4 {
+        font-size: 2rem;
+    }
+    
+    .product-card .card-img-top {
+        height: 220px;
+    }
+}
+
+/* أجهزة لوحية (من 768px إلى 991.98px) */
+@media (min-width: 768px) and (max-width: 991.98px) {
+    .navbar-nav .nav-link {
+        font-size: 0.9rem;
+        padding: 0.5rem 0.8rem;
+    }
+    
+    .product-card .card-img-top {
+        height: 200px;
+    }
+}
+
+/* أجهزة كمبيوتر صغيرة (من 992px إلى 1199.98px) */
+@media (min-width: 992px) and (max-width: 1199.98px) {
+    .container {
+        max-width: 960px;
+    }
+}
+
+/* أجهزة كمبيوتر كبيرة (1200px فما فوق) */
+@media (min-width: 1200px) {
+    .container {
+        max-width: 1140px;
+    }
+}
+
+/* تنسيقات الطباعة */
+@media print {
+    .navbar,
+    footer,
+    .btn,
+    .product-actions {
+        display: none !important;
+    }
+    
+    body {
+        font-size: 12pt;
+        color: #000;
+    }
+    
+    .container {
+        width: 100%;
+        max-width: none;
+    }
+}

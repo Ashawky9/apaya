@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+
+{% block title %}العروض - متجر العبايات{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ url_for('index') }}">الرئيسية</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">العروض</li>
+                </ol>
+            </nav>
+            
+            <h2 class="mb-4">العروض والتخفيضات</h2>
+            <p class="lead text-muted mb-5">استفيدي من أفضل العروض والتخفيضات على تشكيلاتنا من العبايات والمنتجات</p>
+        </div>
+    </div>
+    
+    {% if offers %}
+    <div class="row">
+        {% for offer in offers %}
+        <div class="col-lg-6 mb-4">
+            <div class="card offer-card h-100">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="mb-0">{{ offer.title }}</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-5">
+                            {% if offer.image and offer.image != 'default_offer.jpg' %}
+                            <img 
+                                src="{{ url_for('static', filename='uploads/offers/' + offer.image) }}" 
+                                alt="{{ offer.title }}" 
+                                class="img-fluid rounded"
+                                style="height: 200px; object-fit: cover; width: 100%;"
+                            >
+                            {% else %}
+                            <div class="bg-light rounded d-flex align-items-center justify-content-center" style="height: 200px;">
+                                <i class="bi bi-tag text-muted display-4"></i>
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-7">
+                            <h6 class="text-danger mb-2">خصم {{ offer.discount_percentage }}%</h6>
+                            <p class="card-text">{{ offer.description }}</p>
+                            
+                            <div class="d-flex align-items-center mb-2">
+                                <span class="h4 text-primary me-2">{{ offer.offer_price }} ر.س</span>
+                                <span class="text-muted text-decoration-line-through">{{ offer.original_price }} ر.س</span>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <small class="text-muted">العرض ساري حتى {{ offer.end_date.strftime('%Y-%m-%d') }}</small>
+                            </div>
+                            
+                            <div class="progress mb-3" style="height: 10px;">
+                                <div class="progress-bar bg-danger" role="progressbar" style="width: 75%;" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <small class="text-muted">باقي {{ 25 }}% من الكمية</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-white">
+                    <div class="d-grid">
+                        <a href="{{ url_for('products') }}?offer={{ offer.id }}" class="btn btn-danger">استفد من العرض</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-5">
+        <i class="bi bi-tag display-1 text-muted"></i>
+        <h4 class="mt-3">لا توجد عروض حالياً</h4>
+        <p class="text-muted">تحقق لاحقاً للاستفادة من عروضنا الخاصة</p>
+        <a href="{{ url_for('products') }}" class="btn btn-primary">استكشف المنتجات</a>
+    </div>
+    {% endif %}
+    
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="card bg-light border-0">
+                <div class="card-body text-center py-5">
+                    <h3>اشتركي في نشرتنا البريدية</h3>
+                    <p class="text-muted mb-4">كوني أول من يعرف عن العروض الخاصة والتخفيضات القادمة</p>
+                    
+                    <form class="row g-3 justify-content-center">
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <input type="email" class="form-control" placeholder="بريدك الإلكتروني" required>
+                                <button class="btn btn-primary" type="submit">اشتراك</button>
+                            </div>
+                            <small class="text-muted">يمكنك إلغاء الاشتراك في أي وقت. نحن نحترم خصوصيتك</small>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block styles %}
+<style>
+.offer-card {
+    transition: transform 0.3s;
+}
+
+.offer-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+</style>
+{% endblock %}

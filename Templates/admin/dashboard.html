@@ -1,0 +1,273 @@
+{% extends "base.html" %} {% block title %}لوحة التحكم - متجر العبايات{%
+endblock %} {% block content %}
+<div class="container-fluid py-4">
+  <div class="row">
+    <div class="col-12">
+      <h2 class="mb-4">لوحة التحكم</h2>
+    </div>
+  </div>
+
+  <!-- إحصائيات سريعة -->
+  <div class="row">
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card border-left-primary shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div
+                class="text-xs font-weight-bold text-primary text-uppercase mb-1"
+              >
+                إجمالي المبيعات
+              </div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">
+                0.0 ج.م
+              </div>
+            </div>
+            <div class="col-auto">
+              <i class="bi bi-currency-dollar fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card border-left-success shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div
+                class="text-xs font-weight-bold text-success text-uppercase mb-1"
+              >
+                الطلبات الجديدة
+              </div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">
+                {{ pending_orders }}
+              </div>
+            </div>
+            <div class="col-auto">
+              <i class="bi bi-cart-check fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card border-left-info shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div
+                class="text-xs font-weight-bold text-info text-uppercase mb-1"
+              >
+                المنتجات
+              </div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">
+                {{ total_products }}
+              </div>
+            </div>
+            <div class="col-auto">
+              <i class="bi bi-box-seam fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card border-left-warning shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div
+                class="text-xs font-weight-bold text-warning text-uppercase mb-1"
+              >
+                العملاء
+              </div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">
+                {{ total_users }}
+              </div>
+            </div>
+            <div class="col-auto">
+              <i class="bi bi-people fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <!-- الطلبات الحديثة -->
+    <div class="col-xl-6 col-lg-6">
+      <div class="card shadow mb-4">
+        <div
+          class="card-header py-3 d-flex flex-row align-items-center justify-content-between"
+        >
+          <h6 class="m-0 font-weight-bold text-primary">أحدث الطلبات</h6>
+          <a
+            href="{{ url_for('admin_orders') }}"
+            class="btn btn-sm btn-outline-primary"
+            >عرض الكل</a
+          >
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-bordered" width="100%" cellspacing="0">
+              <thead>
+                <tr>
+                  <th>رقم الطلب</th>
+                  <th>العميل</th>
+                  <th>القيمة</th>
+                  <th>الحالة</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for order in latest_orders %}
+                <tr>
+                  <td>
+                    <a href="{{ url_for('admin_order_detail', id=order.id) }}"
+                      >#{{ order.id }}</a
+                    >
+                  </td>
+                  <td>
+                    {{ order.user.first_name }} {{ order.user.last_name }}
+                  </td>
+                  <td>{{ order.total_amount }}ج.م </td>
+                  <td>
+                    <span
+                      class="badge {% if order.status == 'delivered' %}bg-success {% elif order.status == 'processing' %}bg-primary {% elif order.status == 'shipped' %}bg-info {% elif order.status == 'cancelled' %}bg-danger {% else %}bg-warning{% endif %}"
+                    >
+                      {{ order.status }}
+                    </span>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- المنتجات الحديثة -->
+    <div class="col-xl-6 col-lg-6">
+      <div class="card shadow mb-4">
+        <div
+          class="card-header py-3 d-flex flex-row align-items-center justify-content-between"
+        >
+          <h6 class="m-0 font-weight-bold text-primary">أحدث المنتجات</h6>
+          <a
+            href="{{ url_for('admin_products') }}"
+            class="btn btn-sm btn-outline-primary"
+            >عرض الكل</a
+          >
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-bordered" width="100%" cellspacing="0">
+              <thead>
+                <tr>
+                  <th>الصورة</th>
+                  <th>المنتج</th>
+                  <th>السعر</th>
+                  <th>المخزون</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for product in latest_products %}
+                <tr>
+                  <td>
+                    <img src="{{ url_for('static', filename='uploads/products/' + product.primary_image) }}" 
+             width="50" height="50" style="object-fit: cover;">
+                  </td>
+                  <td>{{ product.name }}</td>
+                  <td>{{ product.price }} ج.م </td>
+                  <td>
+                    {% if product.stock > 10 %}
+                    <span class="badge bg-success">{{ product.stock }}</span>
+                    {% elif product.stock > 0 %}
+                    <span class="badge bg-warning">{{ product.stock }}</span>
+                    {% else %}
+                    <span class="badge bg-danger">نفذ</span>
+                    {% endif %}
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <!-- رسائل التواصل الحديثة -->
+    <div class="col-xl-6 col-lg-6">
+      <div class="card shadow mb-4">
+        <div
+          class="card-header py-3 d-flex flex-row align-items-center justify-content-between"
+        >
+          <h6 class="m-0 font-weight-bold text-primary">رسائل التواصل</h6>
+          <a
+            href="{{ url_for('admin_messages') }}"
+            class="btn btn-sm btn-outline-primary"
+            >عرض الكل</a
+          >
+        </div>
+        <div class="card-body">
+          {% for message in recent_messages %}
+          <div class="card mb-3 border-left-primary">
+            <div class="card-body py-2">
+              <div class="d-flex justify-content-between">
+                <h6 class="font-weight-bold text-primary mb-0">
+                  {{ message.name }}
+                </h6>
+                <small class="text-muted"
+                  >{{ message.created_at.strftime('%Y-%m-%d') }}</small
+                >
+              </div>
+              <p class="text-muted mb-0">{{ message.subject }}</p>
+              <small
+                ><a href="{{ url_for('admin_message_detail', id=message.id) }}"
+                  >عرض التفاصيل</a
+                ></small
+              >
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <!-- نشاط الموقع -->
+    <div class="col-xl-6 col-lg-6">
+      <div class="card shadow mb-4">
+        <div class="card-header py-3">
+          <h6 class="m-0 font-weight-bold text-primary">نشاط الموقع</h6>
+        </div>
+        <div class="card-body">
+          <div class="mb-3">
+            <span class="font-weight-bold">زيارات اليوم:</span>
+            <span class="float-right">0</span>
+          </div>
+          <div class="mb-3">
+            <span class="font-weight-bold">طلبات اليوم:</span>
+            <span class="float-right">0</span>
+          </div>
+          <div class="mb-3">
+            <span class="font-weight-bold">عملاء جدد:</span>
+            <span class="float-right">0</span>
+          </div>
+          <div class="mb-3">
+            <span class="font-weight-bold">معدل التحويل:</span>
+            <span class="float-right">0%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

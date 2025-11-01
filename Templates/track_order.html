@@ -1,0 +1,252 @@
+{% extends "base.html" %}
+
+{% block title %}تتبع الطلب - متجر العبايات{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ url_for('index') }}">الرئيسية</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">تتبع الطلب</li>
+                </ol>
+            </nav>
+            
+            <h2 class="mb-4">تتبع طلبك</h2>
+            <p class="lead text-muted mb-5">ادخلي رقم طلبك لتتعرفي على أحدث حالة لشحنتك</p>
+        </div>
+    </div>
+    
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-body p-4">
+                    <form id="trackOrderForm">
+                        <div class="mb-3">
+                            <label for="orderNumber" class="form-label">رقم الطلب</label>
+                            <input type="text" class="form-control" id="orderNumber" placeholder="أدخلي رقم الطلب الموجود في البريد الإلكتروني للتأكيد" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="email" class="form-label">البريد الإلكتروني</label>
+                            <input type="email" class="form-control" id="email" placeholder="أدخلي البريد الإلكتروني المستخدم في الطلب" required>
+                        </div>
+                        
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">تتبع الطلب</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="card mt-4 d-none" id="trackingResult">
+                <div class="card-body">
+                    <div class="text-center mb-4">
+                        <h4>حالة الطلب: <span class="badge bg-warning" id="orderStatus">قيد المعالجة</span></h4>
+                        <p class="text-muted">رقم الطلب: <span id="resultOrderNumber">123456</span></p>
+                    </div>
+                    
+                    <div class="tracking-timeline">
+                        <div class="timeline-step completed">
+                            <div class="timeline-icon">
+                                <i class="bi bi-cart-check"></i>
+                            </div>
+                            <div class="timeline-content">
+                                <h6>تم تأكيد الطلب</h6>
+                                <p class="text-muted mb-0">تم تأكيد طلبك بنجاح</p>
+                                <small class="text-muted">2023-10-01 10:30</small>
+                            </div>
+                        </div>
+                        
+                        <div class="timeline-step completed">
+                            <div class="timeline-icon">
+                                <i class="bi bi-gear"></i>
+                            </div>
+                            <div class="timeline-content">
+                                <h6>قيد المعالجة</h6>
+                                <p class="text-muted mb-0">يتم تجهيز طلبك للشحن</p>
+                                <small class="text-muted">2023-10-01 14:15</small>
+                            </div>
+                        </div>
+                        
+                        <div class="timeline-step active">
+                            <div class="timeline-icon">
+                                <i class="bi bi-truck"></i>
+                            </div>
+                            <div class="timeline-content">
+                                <h6>قيد الشحن</h6>
+                                <p class="text-muted mb-0">طلبك في الطريق إليك</p>
+                                <small class="text-muted">2023-10-02 09:00</small>
+                            </div>
+                        </div>
+                        
+                        <div class="timeline-step">
+                            <div class="timeline-icon">
+                                <i class="bi bi-house-door"></i>
+                            </div>
+                            <div class="timeline-content">
+                                <h6>تم التسليم</h6>
+                                <p class="text-muted mb-0">تم تسليم طلبك بنجاح</p>
+                                <small class="text-muted">--</small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4">
+                        <h6>تفاصيل الشحن</h6>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p class="mb-1"><strong>اسم المستلم:</strong> <span id="recipientName">سارة محمد</span></p>
+                                <p class="mb-1"><strong>هاتف المستلم:</strong> <span id="recipientPhone">+966 50 123 4567</span></p>
+                            </div>
+                            <div class="col-md-6">
+                                <p class="mb-1"><strong>عنوان التسليم:</strong> <span id="deliveryAddress">الرياض، حي الملز، شارع الملك فهد</span></p>
+                                <p class="mb-1"><strong>شركة الشحن:</strong> <span id="shippingCompany">سمسا اكسبريس</span></p>
+                                <p class="mb-1"><strong>رقم التتبع:</strong> <span id="trackingNumber">SA123456789</span></p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4">
+                        <a href="#" class="btn btn-outline-primary me-2">اتصل بنا</a>
+                        <a href="#" class="btn btn-outline-secondary">تحميل الفاتورة</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h5>أسئلة شائعة حول التتبع</h5>
+                    
+                    <div class="accordion" id="trackingFAQ">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#trackingFAQ1">
+                                    أين يمكنني العثور على رقم طلبي؟
+                                </button>
+                            </h2>
+                            <div id="trackingFAQ1" class="accordion-collapse collapse show">
+                                <div class="accordion-body">
+                                    يمكنك العثور على رقم طلبك في:
+                                    <ul>
+                                        <li>رسالة التأكيد التي تم إرسالها إلى بريدك الإلكتروني</li>
+                                        <li>صفحة "طلباتي" في حسابك</li>
+                                        <li>الفاتورة المرافقة للطلب</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#trackingFAQ2">
+                                    لماذا لا يتم تحديث حالة الشحن؟
+                                </button>
+                            </h2>
+                            <div id="trackingFAQ2" class="accordion-collapse collapse">
+                                <div class="accordion-body">
+                                    قد تستغرق شركات الشحن بعض الوقت لتحديث نظام التتبع. إذا لم يتم تحديث الحالة لأكثر من 48 ساعة، يرجى الاتصال بنا للاستفسار.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#trackingFAQ3">
+                                    ماذا أفعل إذا تأخر الطلب عن الموعد المتوقع؟
+                                </button>
+                            </h2>
+                            <div id="trackingFAQ3" class="accordion-collapse collapse">
+                                <div class="accordion-body">
+                                    إذا تأخر الطلب عن الموعد المتوقع، يرجى:
+                                    <ol>
+                                        <li>التحقق من حالة التتبع أعلاه</li>
+                                        <li>الانتظار 24 ساعة إضافية للتأكد من التأخير</li>
+                                        <li>الاتصال بنا على الرقم +966 12 345 6789 للاستفسار</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.getElementById('trackOrderForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // في التطبيق الحقيقي، سيتم إرسال طلب AJAX إلى الخادم للتحقق من الطلب
+    // هنا مجرد محاكاة للنتيجة
+    
+    document.getElementById('trackingResult').classList.remove('d-none');
+    
+    // التمرير إلى نتيجة التتبع
+    document.getElementById('trackingResult').scrollIntoView({
+        behavior: 'smooth'
+    });
+});
+</script>
+
+<style>
+.tracking-timeline {
+    position: relative;
+    padding: 20px 0;
+}
+
+.tracking-timeline::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 23px;
+    width: 2px;
+    background-color: #e9ecef;
+}
+
+.timeline-step {
+    display: flex;
+    position: relative;
+    margin-bottom: 30px;
+}
+
+.timeline-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-color: #fff;
+    border: 2px solid #e9ecef;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 20px;
+    z-index: 1;
+}
+
+.timeline-content {
+    flex: 1;
+    padding-top: 5px;
+}
+
+.timeline-step.completed .timeline-icon {
+    border-color: #198754;
+    background-color: #198754;
+    color: white;
+}
+
+.timeline-step.active .timeline-icon {
+    border-color: #0d6efd;
+    background-color: #0d6efd;
+    color: white;
+}
+
+.timeline-step:last-child {
+    margin-bottom: 0;
+}
+</style>
+{% endblock %}
